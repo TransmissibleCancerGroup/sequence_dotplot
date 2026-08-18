@@ -20,7 +20,7 @@ pip install matpotlib
 ## Usage
 
 * **dotplot.py** is the main python script - run this to produce your plot
-* **sequence1.txt** and **sequence2.txt** are text files where you should input the sequence you would like to compare
+* **sequence1.txt** and **sequence2.txt** are text files where you should input the sequences you would like to compare. 'Sequence 1' will appear on the x axis and the gene labels should correspond to this sequence.
 * **options.txt** are user configurable options
   * Window size controls how many nucleotides need to match for a dot to be plotted
   * You can optionally add you own gene annotations in the format label:start,end
