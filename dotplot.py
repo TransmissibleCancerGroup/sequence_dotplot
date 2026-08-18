@@ -3,16 +3,41 @@ import matplotlib.pyplot as plt
 
 number = {'A':0, 'T':1, 'G':2, 'C':3}
 
-def read_to_numb(F):
-    with open(f"{F}.txt") as f:
-        text = f.read().replace("\n", "")
-    number_list = [number[i] for i in list(text)]
+def seq_to_numb(seq):
+    number_list = [number[i] for i in list(seq)]
     number_mat = np.array(number_list)
     return number_mat
 
+def read_fasta(F):
+    header = None
+    sequence = []
+    with open(F) as f:
+        for line in f:
+            line = line.strip()
+            if not line: # skip any empty lines
+                continue
+            if line.startswith('>'):
+                if header is not None:
+                    # we must have found a second sequence, but we only want one
+                    # the simplest thing to do is to break here and also complain a bit
+                    # The remainder of the function will make sure the first sequence is returned
+                    import sys
+                    print('One at a time, please! Only using the first sequence in the Fasta file', file=sys.stderr)
+                    break
+                else:
+                    # Save the header, drop the '>' sigil
+                    header = line[1:]
+            else:
+                # Fastas are often multiline, so just grab the bits of the sequence to be stitched together later
+                sequence.append(line)
+
+    # The aforementioned stitching
+    sequence = ''.join(sequence)
+    return header, seq_to_numb(sequence)
+
 #get read sequences from text files
-seq1 = read_to_numb('sequence1')
-seq2 = read_to_numb('sequence2')
+header1, seq1 = read_fasta('sequence1.txt')
+header2, seq2 = read_fasta('sequence2.txt')
 
 n1 = len(seq1)
 n2 = len(seq2)
