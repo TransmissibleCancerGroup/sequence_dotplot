@@ -22,18 +22,22 @@ print('sequence 2 length:',n2)
 
 #load options
 options_dict = {}
+labels_dict = {}
 with open('options.txt') as options: 
     for line in options:
-        len(line.split(':'))
         line = line.rstrip('\n')
+        line = line.rstrip(' ')
         if len(line.split(':')) > 1:
-            label, coordstext = line.split(':')
-            coords = [int(x) for x in coordstext.split(",")]
-            options_dict[label] = coords
+            label, text = line.split(':')
+            if text and all(c.isdigit() or c == ',' for c in text):
+                coords = [int(x) for x in text.split(",")]
+                options_dict[label] = coords
+            else:
+                labels_dict[label] = text
 options.close()
 
 if 'window_size' in options_dict:
-    w = options_dict['window_size'][0] #window size
+    w = int(options_dict['window_size'][0]) #window size
     print('windows size:',w)
 else: 
     assert 'Please input a window size'
@@ -147,7 +151,7 @@ plt.scatter(X, Y, s=0.1, c='blue', label='forward')
 plt.scatter(X_rc, Y_rc, s=0.1, c='red', label='reverse complement')
 
 #label regions on plot:
-cmap = plt.get_cmap('nipy_spectral') 
+cmap = plt.get_cmap('hsv') 
 # ^ change this for a different colour scheme (google 'matplotlip colourmaps')
 # depending on the chosen colourmap, may also need to change the range of the list below
 colours = [cmap(x) for x in np.linspace(0,1,len(options_dict)-3, endpoint=False)]
@@ -159,5 +163,10 @@ for label, region in options_dict.items():
             c += 1
 
 plt.ticklabel_format(style='plain', axis='both', useOffset=False)
+
+plt.title(labels_dict['title'])
+plt.xlabel(labels_dict['x_label'])
+plt.ylabel(labels_dict['y_label'])
+
 plt.legend()
 plt.show()
