@@ -6,16 +6,16 @@ Python script for plotting DNA sequence dotplots, similar to https://en.vectorbu
 
 Clone the repository locally and run from your computer
 
-''' bash 
-git clone 
-'''
+```bash 
+git clone https://github.com/SofiaMonarchi/sequence_dotplot.git
+```
 
 The script requires numpy and matplotlib. 
 
-'''bash 
+```bash 
 pip install numpy
 pip install matpotlib 
-'''
+```
 
 ## Usage
 
